@@ -1,4 +1,6 @@
-<script type="module">
+// ─── tmp.sync · Diagnose ────────────────────────────────────
+// Lädt alle Module und zeigt deren Output
+
 import * as K81 from "./JS/3x81.js";
 import * as Rings5D from "./JS/AtomRings5D.js";
 import * as Orbit from "./JS/Orbit48D.js";
@@ -13,71 +15,81 @@ function show(title, value) {
     div.style.color = "#eee";
     div.style.padding = "10px";
     div.style.margin = "10px 0";
-    div.innerHTML = `<h3>${title}</h3><pre>${value}</pre>`;
+    div.innerHTML = `<h3>${title}</h3><pre>${typeof value === 'object' ? JSON.stringify(value, null, 2) : value}</pre>`;
     document.body.appendChild(div);
 }
 
-async function start() {
+export async function diagnose() {
+    const results = {};
 
-    // 1) Kernel prüfen
+    // Kernel
     try {
         const kernelFn = K81.Kernel3x81 || K81.Kernel81 || K81.default;
-        show("Kernel Function Found", JSON.stringify(kernelFn !== undefined));
-
         const atom = await kernelFn?.();
+        results.kernel = atom;
         show("Kernel Output", JSON.stringify(atom, null, 2));
     } catch (e) {
-        show("❌ Kernel ERROR", e.stack);
+        show("❌ Kernel ERROR", e.message);
     }
 
-    // 2) Rings5D
+    // Rings5D
     try {
         const r = Rings5D.AtomRings5D?.();
-        show("AtomRings5D", r ?? "❌ Returned NULL");
+        results.rings5D = r;
+        show("AtomRings5D", r ?? "Returned NULL");
     } catch (e) {
-        show("❌ AtomRings5D ERROR", e.stack);
+        show("❌ AtomRings5D ERROR", e.message);
     }
 
-    // 3) Orbit48D
+    // Orbit48D
     try {
         const o = Orbit.Orbit48D?.();
+        results.orbit = o;
         show("Orbit48D", JSON.stringify(o, null, 2));
     } catch (e) {
-        show("❌ Orbit48D ERROR", e.stack);
+        show("❌ Orbit48D ERROR", e.message);
     }
 
-    // 4) Z-Axis
+    // Z‑Axis
     try {
         const z = ZAxis.Z_Axis?.();
+        results.zAxis = z;
         show("Z_Axis", JSON.stringify(z, null, 2));
     } catch (e) {
-        show("❌ Z_Axis ERROR", e.stack);
+        show("❌ Z_Axis ERROR", e.message);
     }
 
-    // 5) V-Axis
+    // V‑Axis
     try {
         const v = VAxis.V_Axis?.();
+        results.vAxis = v;
         show("V_Axis", JSON.stringify(v, null, 2));
     } catch (e) {
-        show("❌ V_Axis ERROR", e.stack);
+        show("❌ V_Axis ERROR", e.message);
     }
 
-    // 6) HyperMatrix
+    // HyperMatrix
     try {
         const hyper = await Hyper81._81tmp_HyperMatrix?.();
+        results.hyper = hyper;
         show("81tmp HyperMatrix", JSON.stringify(hyper, null, 2));
     } catch (e) {
-        show("❌ HyperMatrix ERROR", e.stack);
+        show("❌ HyperMatrix ERROR", e.message);
     }
 
-    // 7) InfinityCrossSVG
+    // InfinityCrossSVG
     try {
         const svg = InfinityCross.InfinityCrossSVG?.();
-        show("InfinityCrossSVG", svg?.outerHTML ?? svg ?? "❌ Returned NULL");
+        results.infinity = svg;
+        show("InfinityCrossSVG", svg?.outerHTML ?? svg ?? "Returned NULL");
     } catch (e) {
-        show("❌ InfinityCrossSVG ERROR", e.stack);
+        show("❌ InfinityCrossSVG ERROR", e.message);
     }
+
+    return results;
 }
 
-start();
-</script>
+// Auto‑Run
+if (import.meta.url === document.currentScript?.src) {
+    diagnose();
+}
