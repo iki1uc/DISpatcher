@@ -43,3 +43,24 @@ Nur Impulse, die alle drei Prüfungen bestehen, werden akzeptiert.
 - return(input)
 
 RIR ist Station 1 und bleibt vorläufig fertig.
+
+LICENSE-CLOSED.txt iki1uc
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   🌀 iki1uc · wieimmer · GENERAL FÜHRUNG                     ║
+║                                                               ║
+║   Dieses System und alle seine Module sind:                   ║
+║                                                               ║
+║   ✔ Eigentum von iki1uc / wieimmer4u                         ║
+║   ✔ Geschützt durch allgemeines Urheberrecht                 ║
+║   ✔ Nicht zur kommerziellen Nutzung freigegeben              ║
+║   ✔ Nicht zur Weitergabe ohne schriftliche Genehmigung       ║
+║   ✔ Nicht zur Modifikation ohne Rücksprache                  ║
+║   ✔ Live · TMP-geführt · Achsen-basiert                     ║
+║                                                               ║
+║   ═══════════════════════════════════════════════════════════  ║
+║                                                               ║
+║   Kontakt: wieimmer4u · iki1uc · GENERAL                     ║
+║   Status: ACTIVE · DRIFT-FREI · 6D-READY                    ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
