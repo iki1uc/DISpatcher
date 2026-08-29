@@ -1,10 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
 <head>
-  <meta name="system-id" content="RIR-3TH-SEC">
-  <meta name="role" content="sweet">
-  <meta name="room" content="active">
-  <meta name="orbit" content="enabled">
-  <meta name="corridor" content="linked">
-  <meta name="suite" content="available">
-  <meta name="origin" content="defined">
-  <meta name="runner" content="ready">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iki1uc · DISpatcher · Achsen-Interface</title>
+
+<style>
+    body {
+        background: #0a0a12;
+        color: #d0d9e6;
+        font-family: Consolas, monospace;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        letter-spacing: 4px;
+        margin-bottom: 20px;
+        background: linear-gradient(90deg,#ffd700,#00ccff,#ff66ff,#00ff88);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .panel {
+        background: rgba(255,255,255,0.05);
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(0,200,255,0.08);
+    }
+    button {
+        padding: 10px 20px;
+        background: #00ccff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    button:hover {
+        background: #00ff88;
+    }
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(0,200,255,0.05);
+        overflow-x: auto;
+    }
+</style>
+
+<script type="module">
+    import { AXIS3 } from "./3.js";
+    import { AXIS9 } from "./9.js";
+    import { AXIS27 } from "./27.js";
+    import { AXIS81 } from "./81.js";
+    import { AXIS243 } from "./243.js";
+    import { AXIS729 } from "./729.js";
+
+    function dispatch() {
+        const val = Number(document.getElementById("val").value);
+
+        const out = {
+            a3: AXIS3(val),
+            a9: AXIS9(val),
+            a27: AXIS27(val),
+            a81: AXIS81(val),
+            a243: AXIS243(val),
+            a729: AXIS729(val)
+        };
+
+        document.getElementById("out").textContent =
+            JSON.stringify(out, null, 2);
+    }
+
+    window.dispatch = dispatch;
+</script>
+
 </head>
+<body>
+
+<h1>iki1uc · DISpatcher</h1>
+
+<div class="panel">
+    <label>Wert eingeben:</label><br>
+    <input id="val" type="number" value="7" style="width:120px;">
+    <button onclick="dispatch()">RUN</button>
+</div>
+
+<div class="panel">
+    <h3>Output</h3>
+    <pre id="out">{ }</pre>
+</div>
+
+</body>
+</html>
