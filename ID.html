@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iki1uc · DISpatcher · Achsen-Interface</title>
+<title>iki1uc · DISpatcher · ID</title>
 
 <style>
     body {
@@ -27,68 +27,33 @@
         margin-bottom: 20px;
         border: 1px solid rgba(0,200,255,0.08);
     }
-    button {
-        padding: 10px 20px;
-        background: #00ccff;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-        margin-top: 10px;
-    }
-    button:hover {
-        background: #00ff88;
-    }
     pre {
         background: rgba(0,0,0,0.3);
         padding: 16px;
         border-radius: 12px;
         border: 1px solid rgba(0,200,255,0.05);
         overflow-x: auto;
+        font-size: 14px;
+        line-height: 1.4;
     }
 </style>
-
-<script type="module">
-    import { AXIS3 } from "./3.js";
-    import { AXIS9 } from "./9.js";
-    import { AXIS27 } from "./27.js";
-    import { AXIS81 } from "./81.js";
-    import { AXIS243 } from "./243.js";
-    import { AXIS729 } from "./729.js";
-
-    function dispatch() {
-        const val = Number(document.getElementById("val").value);
-
-        const out = {
-            a3: AXIS3(val),
-            a9: AXIS9(val),
-            a27: AXIS27(val),
-            a81: AXIS81(val),
-            a243: AXIS243(val),
-            a729: AXIS729(val)
-        };
-
-        document.getElementById("out").textContent =
-            JSON.stringify(out, null, 2);
-    }
-
-    window.dispatch = dispatch;
-</script>
 
 </head>
 <body>
 
-<h1>iki1uc · DISpatcher</h1>
+<h1>iki1uc · DISpatcher · ID</h1>
 
 <div class="panel">
-    <label>Wert eingeben:</label><br>
-    <input id="val" type="number" value="7" style="width:120px;">
-    <button onclick="dispatch()">RUN</button>
-</div>
-
-<div class="panel">
-    <h3>Output</h3>
-    <pre id="out">{ }</pre>
+<pre>
+ID.MODE     = neutral
+ID.CORE     = 243
+ID.ROLE     = PQ‑Root
+ID.STATE    = stabil
+ID.READY    = 100%
+ID.LINK     = lokal
+ID.RUNTIME  = RESPO v2.43
+ID.WHIRL    = WHIRL_PQ
+</pre>
 </div>
 
 </body>
