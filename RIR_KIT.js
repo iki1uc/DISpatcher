@@ -2,7 +2,7 @@
 // Verbindet RIR.Core + KIT.js sauber
 
 import { RIR } from "./RIR.Core.js";
-import { KIT } from "./KIT.js";   // KIT wird importiert
+import { KIT } from "./KIT.js";
 
 export function RIR_KIT(input) {
     const check = RIR.return(input);
@@ -12,5 +12,5 @@ export function RIR_KIT(input) {
     }
 
     // KIT.run() – NICHT KIT_RUN()
-    return KIT.run(input);
+    return KIT.run(check.packet);
 }
