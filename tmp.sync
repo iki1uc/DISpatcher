@@ -1,0 +1,83 @@
+<script type="module">
+import * as K81 from "./JS/3x81.js";
+import * as Rings5D from "./JS/AtomRings5D.js";
+import * as Orbit from "./JS/Orbit48D.js";
+import * as ZAxis from "./JS/Z.axis.js";
+import * as VAxis from "./JS/V.axis.js";
+import * as Hyper81 from "./JS/81tmp.hyper.js";
+import * as InfinityCross from "./JS/InfinityCrossSVG.js";
+
+function show(title, value) {
+    const div = document.createElement("div");
+    div.style.background = "#111";
+    div.style.color = "#eee";
+    div.style.padding = "10px";
+    div.style.margin = "10px 0";
+    div.innerHTML = `<h3>${title}</h3><pre>${value}</pre>`;
+    document.body.appendChild(div);
+}
+
+async function start() {
+
+    // 1) Kernel prüfen
+    try {
+        const kernelFn = K81.Kernel3x81 || K81.Kernel81 || K81.default;
+        show("Kernel Function Found", JSON.stringify(kernelFn !== undefined));
+
+        const atom = await kernelFn?.();
+        show("Kernel Output", JSON.stringify(atom, null, 2));
+    } catch (e) {
+        show("❌ Kernel ERROR", e.stack);
+    }
+
+    // 2) Rings5D
+    try {
+        const r = Rings5D.AtomRings5D?.();
+        show("AtomRings5D", r ?? "❌ Returned NULL");
+    } catch (e) {
+        show("❌ AtomRings5D ERROR", e.stack);
+    }
+
+    // 3) Orbit48D
+    try {
+        const o = Orbit.Orbit48D?.();
+        show("Orbit48D", JSON.stringify(o, null, 2));
+    } catch (e) {
+        show("❌ Orbit48D ERROR", e.stack);
+    }
+
+    // 4) Z-Axis
+    try {
+        const z = ZAxis.Z_Axis?.();
+        show("Z_Axis", JSON.stringify(z, null, 2));
+    } catch (e) {
+        show("❌ Z_Axis ERROR", e.stack);
+    }
+
+    // 5) V-Axis
+    try {
+        const v = VAxis.V_Axis?.();
+        show("V_Axis", JSON.stringify(v, null, 2));
+    } catch (e) {
+        show("❌ V_Axis ERROR", e.stack);
+    }
+
+    // 6) HyperMatrix
+    try {
+        const hyper = await Hyper81._81tmp_HyperMatrix?.();
+        show("81tmp HyperMatrix", JSON.stringify(hyper, null, 2));
+    } catch (e) {
+        show("❌ HyperMatrix ERROR", e.stack);
+    }
+
+    // 7) InfinityCrossSVG
+    try {
+        const svg = InfinityCross.InfinityCrossSVG?.();
+        show("InfinityCrossSVG", svg?.outerHTML ?? svg ?? "❌ Returned NULL");
+    } catch (e) {
+        show("❌ InfinityCrossSVG ERROR", e.stack);
+    }
+}
+
+start();
+</script>
