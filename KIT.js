@@ -1,12 +1,19 @@
-import { RIR } from "./RIR.Core.js";
-import { KIT } from "./KIT.js";
+// ─── KIT.js ─────────────────────────────────────────────────
+// Pipeline‑Runner für RIR_KIT
 
-export function RIR_KIT(input) {
-  const check = RIR.return(input);
-
-  if (check.RIR === "reject") {
-    return { status: "reject", source: "RIR" };
-  }
-
-  return KIT_RUN(input);
-}
+export const KIT = {
+    run(input) {
+        // Nimmt gereinigten Input und führt Pipeline aus
+        return {
+            status: "accept",
+            source: "KIT",
+            input,
+            processed: {
+                x: input.x * 2,
+                y: input.y * 3,
+                z: input.z * 5
+            },
+            timestamp: new Date().toISOString()
+        };
+    }
+};
