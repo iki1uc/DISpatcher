@@ -31,3 +31,16 @@ export const stateProxy = new Proxy({}, {
     return getState(prop);
   }
 });
+// ─── 243.js · PROXY‑FIX ──────────────────────────────────────
+
+function getState(prop) {
+    if (typeof prop !== 'string') return undefined; // ← FIX: Symbols ignorieren
+    const parts = prop.split(',');
+    return parts.map(p => p.trim());
+}
+
+export const stateProxy = new Proxy({}, {
+    get(_, prop) {
+        return getState(prop);
+    }
+});
