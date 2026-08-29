@@ -1,1 +1,6 @@
+import { MARKET } from "./market.js";
 
+market: MARKET.flow(
+    r243.sum,
+    input.axiom ?? "e"
+),
