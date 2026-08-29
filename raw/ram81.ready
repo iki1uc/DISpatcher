@@ -1,1 +1,56 @@
+// ─── READY‑MODULE ─────────────────────────────────────────────
+// Jede .ready Datei nutzt dieses Grundmuster
+// Damit ist sie voll JS‑fähig und vom DISpatcher nutzbar
 
+export const READY = {
+
+    // Name des Moduls (automatisch aus Dateiname ableitbar)
+    name: import.meta.url.split('/').pop(),
+
+    // Basis‑Input
+    input: {
+        x: 0,
+        y: 0,
+        z: 0,
+        mass: 1,
+        time: 1,
+        axiom: "e"
+    },
+
+    // Setzen von Input
+    set(input = {}) {
+        Object.assign(this.input, input);
+        return this;
+    },
+
+    // Haupt‑Algorithmus (hier kommt deine Logik rein)
+    compute() {
+        const { x, y, z, mass, time, axiom } = this.input;
+
+        // Beispiel‑Berechnung (du ersetzt das!)
+        const result = {
+            sum: x + y + z,
+            torque: (x + y + z) * mass * time,
+            axiomVector: this.axiomVector(axiom),
+            timestamp: new Date().toISOString()
+        };
+
+        return result;
+    },
+
+    // Axiom‑Vektoren (d/e/i/n/o/r/s/w/u)
+    axiomVector(key) {
+        const AX = {
+            d: 1.11,
+            e: 1.33,
+            i: 0.77,
+            n: 0.92,
+            o: 1.44,
+            r: 1.66,
+            s: 1.21,
+            w: 1.55,
+            u: 2.00
+        };
+        return AX[key] ?? 1;
+    }
+};
