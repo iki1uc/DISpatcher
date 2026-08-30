@@ -44,3 +44,13 @@ export async function RUN3(input) {
         timestamp: new Date().toISOString()
     };
 }
+import ASYM from "../RUN/asymilation.ready";
+
+const asym = ASYM.set({
+    raum: input.raum,
+    axiom: input.axiom,
+    axis: input.axis,
+    hdf: rom[input.axiom + ".hdf.rom"]
+}).compute();
+
+result.asymilation = asym;
