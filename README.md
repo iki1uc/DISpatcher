@@ -1,66 +1,25 @@
-# Erweiterung: D-Q-F, XyX, AIR/AIV
+# DESAMALATZION
 
-Das System erweitert RIR um dynamische Zustände (243.js), die über D-Q-F
-beschrieben werden. Zusätzlich existiert ein Sondermodus XyX, der bei
-Auftreten einer 9 aktiviert wird.
+Modulares iki1uc‑System mit Etagen, Kernel‑Trennung, RIR‑Prüfung,
+KIT‑Pipeline, TYQ‑RAM‑Status, stateProxy‑Segmentierung und Blitz‑RUN‑Modus.
 
-## D-Q-F
-D = Dimension
-Q = Quantenfaktor
-F = Flavor/Faktor
+## Module
 
-## XyX-Modus
-XyX wird aktiv, wenn x, y oder z den Wert 9 haben.
+- 3js · Etage 3
+- 9.js · Etage 9
+- 81.js · Etage 81
+- 81.viewer.js · Viewer für Etage 81
+- RUN.work.js · Arbeits‑Pipeline
+- pipeline.blitz.run3.js · Blitz‑RUN 3
+- api.js · API‑Core
+- api.ready · API‑Status
+- link.ready · Link‑Status
+- net.ready · Netzwerk‑Status
 
-### AIR
-AIR = Auftrieb (Lift)
-Wird aktiv, wenn (x+y+z) gerade ist.
+## Lizenz
 
-### AIV
-AIV = Abtrieb (Downforce)
-Wird aktiv, wenn (x+y+z) ungerade ist.
+Siehe `LICENSE-CLOSED.txt`.
 
-## Dateien
-- 3.js → Basis-DQF
-- 81.js → Erweiterte 9×9-DQF
-- XyX.js → Sondermodus AIR/AIV
-- 243.js → Proxy + Routing + DQF + XyX
-## RIR.Core
+## Start
 
-Der RIR-Core ist die Reinheitsinstanz des Systems. Er prüft:
-
-1. Existenz
-2. Struktur
-3. Reinheit
-
-Nur Impulse, die alle drei Prüfungen bestehen, werden akzeptiert.
-
-### Funktionen
-- exist(input)
-- structure(input)
-- purity(input)
-- filter(input)
-- return(input)
-
-RIR ist Station 1 und bleibt vorläufig fertig.
-
-LICENSE-CLOSED.txt iki1uc
-╔═══════════════════════════════════════════════════════════════╗
-║                                                               ║
-║   🌀 iki1uc · wieimmer · GENERAL FÜHRUNG                     ║
-║                                                               ║
-║   Dieses System und alle seine Module sind:                   ║
-║                                                               ║
-║   ✔ Eigentum von iki1uc / wieimmer4u                         ║
-║   ✔ Geschützt durch allgemeines Urheberrecht                 ║
-║   ✔ Nicht zur kommerziellen Nutzung freigegeben              ║
-║   ✔ Nicht zur Weitergabe ohne schriftliche Genehmigung       ║
-║   ✔ Nicht zur Modifikation ohne Rücksprache                  ║
-║   ✔ Live · TMP-geführt · Achsen-basiert                     ║
-║                                                               ║
-║   ═══════════════════════════════════════════════════════════  ║
-║                                                               ║
-║   Kontakt: wieimmer4u · iki1uc · GENERAL                     ║
-║   Status: ACTIVE · DRIFT-FREI · 6D-READY                    ║
-║                                                               ║
-╚═══════════════════════════════════════════════════════════════╝
+index.html laden und Module nach Bedarf aktivieren.
