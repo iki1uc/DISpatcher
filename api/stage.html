@@ -2,97 +2,67 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>iki1uc · STAGE</title>
+<title>iki1uc · API · STAGE</title>
 <style>
-    body {
-        background:#000;
-        color:#0f0;
-        font-family:Consolas, monospace;
-        padding:40px;
-    }
-    h1 {
-        text-align:center;
-        color:#0f0;
-        margin-bottom:20px;
-    }
-    .panel {
-        background:#111;
-        border:1px solid #0f0;
-        padding:20px;
-        border-radius:10px;
-        margin-bottom:20px;
-    }
-    pre {
-        background:#020;
-        padding:20px;
-        border-radius:10px;
-        border:1px solid #0f0;
-        overflow-x:auto;
-    }
+    body{background:#000;color:#0f0;font-family:Consolas,monospace;padding:40px}
+    h1{text-align:center;color:#0f0;margin-bottom:20px}
+    .panel{background:#111;border:1px solid #0f0;padding:20px;border-radius:10px;margin-bottom:20px}
+    pre{background:#020;padding:20px;border-radius:10px;border:1px solid #0f0;overflow-x:auto}
 </style>
 </head>
 <body>
 
-<h1>iki1uc · STAGE</h1>
+<h1>iki1uc · API · STAGE</h1>
 
 <div class="panel">
-    <h2>Ordner‑Status</h2>
-    <pre>
-Dieser Ordner ist Teil des DISpatcher‑Systems.
-Er dient als Engine‑Stage für:
+<h2>API‑Narrativ</h2>
+<pre>
+Der API‑Raum ist die Kommunikations‑Engine des DISpatchers.
 
-• Achsen
-• Axiome
-• RAM/ROM‑Werte
-• RAW‑Kräfte
-• API‑Kommunikation
-• Markt‑Impulse
-• DirectV‑Schienen
-• Vector‑Flow
-• D‑Q‑F‑Routing
-• XyX‑Modus
-    </pre>
+Er verbindet:
+
+• RAW → Kräfte
+• RAM → Achsen
+• ROM → Axiome
+• core → DQF / RIR / KIT / 243 / XyX
+• markt → Kapitalfluss / Risiko / Industrie / Börse
+• index.html → UI
+
+API ist der Vermittler zwischen allen Engines.
+</pre>
 </div>
 
 <div class="panel">
-    <h2>System‑Narrativ</h2>
-    <pre>
-Dies ist eine narrative Diagnose‑Seite.
-Sie funktioniert wie eine 404.html,
-aber sie erklärt den Zustand dieses Ordners.
+<h2>API‑Module</h2>
+<pre>
+• API.system.js
+• API.raw
+• ART.link
+• flow.js
+• market.js
+• respo-linker-engine.js
 
-Wenn dieser Ordner geladen wird,
-zeigt diese STAGE:
-
-• Welche Engine‑Stufe aktiv ist
-• Welche Achse hier wirkt
-• Welche Axiome gelten
-• Welche RAM/ROM‑Werte geladen sind
-• Welche RAW‑Kräfte aktiv sind
-• Welche API‑Module hier kommunizieren
-• Welche Markt‑Impulse wirken
-• Welche DirectV‑Schiene aktiv ist
-• Welcher Vector‑Flow erzeugt wird
-    </pre>
+Jedes Modul hat eigene Parameter.
+</pre>
 </div>
 
 <div class="panel">
-    <h2>Technische Funktion</h2>
-    <pre>
-Diese STAGE ist nicht Teil des Algorithmus.
-Sie ist eine Diagnose‑Seite.
+<h2>API‑Parameter</h2>
+<pre>
+API.system unterstützt dynamische Parameter:
 
-Sie dient dazu:
+• apiMode        → "normal", "markt", "raw", "ram", "rom"
+• apiFlow        → Flow‑Intensität
+• apiImpulse     → Impuls‑Stärke
+• apiAxiom       → d/e/i/n/o/r/s/w/u
+• apiAxis        → 3/9/27/81/243/729
+• apiTorque      → Kraft aus RAW.engine
+• apiMarket      → Marktfluss aus market.js
+• apiRAM         → Achsen‑Speicher aus RAM.engine
+• apiROM         → Axiom‑Gesetze aus ROM.engine
 
-• Fehler zu erkennen
-• Engine‑Stufen zu prüfen
-• Achsen‑Zustände zu sehen
-• Axiom‑Zustände zu prüfen
-• RAM/ROM‑Ladefehler zu erkennen
-• RAW‑Kräfte zu prüfen
-• API‑Kommunikation zu testen
-• Markt‑Impulse zu validieren
-    </pre>
+Diese Parameter können dynamisch geändert werden.
+</pre>
 </div>
 
 </body>
