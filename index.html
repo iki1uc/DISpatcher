@@ -3,336 +3,148 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iki1uc · SOLIDE · INDEX · ETAGEN</title>
-
+<title>iki1uc · DISpatcher · index (verbunden)</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#0f0;font-family:monospace;padding:20px;margin:0;min-height:100vh}
-pre{font-size:13px;line-height:1.5;white-space:pre-wrap}
-.box{border:1px solid #0f0;padding:16px;margin:8px 0;border-radius:8px;background:#0a0a0a}
-a{color:#0f0;text-decoration:none;display:inline-block;padding:4px 12px;border:1px solid #0f0;margin:4px;border-radius:4px}
-a:hover{background:#0f0;color:#000}
-button{background:#0f0;color:#000;border:none;padding:6px 16px;font-weight:bold;cursor:pointer;font-family:monospace;border-radius:4px}
-button:hover{background:#0ff}
-.flex{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;align-items:center}
-input,select{background:#000;color:#0f0;border:1px solid #0f0;padding:4px 8px;font-family:monospace;border-radius:4px}
-input{width:100px}
-.highlight{color:#0ff}
+    body {
+        background: #0a0a12;
+        color: #d0d9e6;
+        font-family: Consolas, monospace;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        letter-spacing: 4px;
+        margin-bottom: 20px;
+        background: linear-gradient(90deg,#ffd700,#00ccff,#ff66ff,#00ff88);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .panel {
+        background: rgba(255,255,255,0.05);
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(0,200,255,0.08);
+    }
+    .flex { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
+    label { font-size: 11px; color: #9df; }
+    input {
+        background: #000; color: #0f0; border: 1px solid #0f0;
+        padding: 4px 8px; font-family: monospace; width: 70px;
+    }
+    button {
+        background: #0f0; color: #000; border: none;
+        padding: 6px 14px; font-weight: bold; cursor: pointer; font-family: monospace;
+    }
+    button:hover { background: #0ff; }
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(0,200,255,0.05);
+        overflow-x: auto;
+        font-size: 13px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+    }
+    .ok { color: #6bffa9; }
+    .err { color: #ff6b8a; }
 </style>
 </head>
 <body>
 
-<pre id="banner">
-╔═══════════════════════════════════════════════════════════════╗
-║  iki1uc · SOLIDE · INDEX · ETAGEN                           ║
-╠═══════════════════════════════════════════════════════════════╣
-║  SYSTEM:   AKTIV                                            ║
-║  ETAGEN:   3 · 9 · 27 · 81 · 729                           ║
-║  KERNEL:   ULTRA-MINI + RIR + KIT                          ║
-║  STATUS:   BEREIT                                           ║
-║  RAM:      <span id="ramDisplay">8192 MB</span>                                           ║
-║  TYQ:      <span id="tyqDisplay">INIT</span>                                              ║
-╚═══════════════════════════════════════════════════════════════╝
+<h1>iki1uc · DISpatcher</h1>
 
-[SOLIDE] System bereit. Wähle eine Etage oder starte RUN.
+<div class="panel">
+<pre>
+ID.MODE     = neutral
+ID.CORE     = 243
+ID.ROLE     = PQ‑Root
+ID.STATE    = verbunden
+ID.RUNTIME  = RIR.Core + DQF + XyX + 243
+ID.WHIRL    = WHIRL_PQ
 </pre>
-
-<div class="flex">
-    <a href="?etage=3">🌀 3 · UR</a>
-    <a href="?etage=9">⚡ 9 · KERN</a>
-    <a href="?etage=27">🌐 27 · ORBIT</a>
-    <a href="?etage=81">🔷 81 · RAUM</a>
-    <a href="?etage=729">🌱 729 · LEBEN</a>
 </div>
 
-<div class="flex">
-    <label>ETAGE:</label>
-    <select id="etageSelect">
-        <option value="3">3 · UR</option>
-        <option value="9">9 · KERN</option>
-        <option value="27">27 · ORBIT</option>
-        <option value="81" selected>81 · RAUM</option>
-        <option value="729">729 · LEBEN</option>
-    </select>
-
-    <label>WERT:</label>
-    <input id="wertInput" type="number" value="81">
-
-    <button onclick="runEtage()">▶ RUN</button>
-    <button onclick="resetAll()">⟲ RESET</button>
-    <button onclick="runTYQ()">💾 TYQ</button>
-    <button onclick="runRIR()">🔍 RIR</button>
+<div class="panel">
+    <div class="flex">
+        <label>X:</label><input id="x" type="number" value="3">
+        <label>Y:</label><input id="y" type="number" value="9">
+        <label>Z:</label><input id="z" type="number" value="27">
+        <button id="runBtn">▶ RUN (RIR + DQF/XyX + 243)</button>
+    </div>
 </div>
 
-<div class="box" id="output">
-    <pre style="color:#0a0">⏳ Warte auf Auswahl oder RUN...</pre>
-</div>
+<div id="output"></div>
 
-<div class="box" id="rirOutput" style="border-color:#444;display:none">
-    <pre style="color:#444">⏳ RIR‑Output wartet...</pre>
-</div>
+<script type="module">
+    import { baseDQF } from "./3.js";
+    import { extendedDQF } from "./81.js";
+    import { XyX } from "./XyX.js";
+    import { stateProxy } from "./243.js";
+    import { RIR } from "./RIR.Core.js";
 
-<script>
-// ─── 1) ULTRA-MINI-KERNEL ──────────────────────────────────────
-const KERNEL = {
-    etagen: [3, 9, 27, 81, 729],
+    const outputEl = document.getElementById("output");
 
-    trennung(wert, etage) {
-        const quotient = Math.floor(wert / etage);
-        return {
-            geteilt: wert / etage,
-            mod: wert % etage,
-            quotient: quotient,
-            rest: wert - (quotient * etage)
-        };
-    },
+    function show(title, value, isError = false) {
+        const div = document.createElement("div");
+        div.className = "panel";
+        div.innerHTML = `<h3 style="margin:0 0 8px 0;font-size:13px;color:${isError ? '#ff6b8a' : '#00ccff'}">${title}</h3>
+            <pre class="${isError ? 'err' : 'ok'}">${value}</pre>`;
+        outputEl.appendChild(div);
+    }
 
-    alle(wert) {
-        const result = {};
-        this.etagen.forEach(e => {
-            result[e] = this.trennung(wert, e);
-        });
-        return result;
-    },
+    function run() {
+        outputEl.innerHTML = "";
+        const x = Number(document.getElementById("x").value);
+        const y = Number(document.getElementById("y").value);
+        const z = Number(document.getElementById("z").value);
 
-    run(wert, etage) {
-        if (!this.etagen.includes(etage)) {
-            return { error: `Etage ${etage} nicht verfügbar`, etagen: this.etagen };
+        // 1) RIR.Core — Reinheitsprüfung
+        try {
+            const check = RIR.return({ x, y, z });
+            show("RIR.Core · return()", JSON.stringify(check, null, 2));
+        } catch (e) {
+            show("❌ RIR.Core ERROR", e.stack, true);
         }
-        const t = this.trennung(wert, etage);
-        return {
-            input: wert,
-            etage: etage,
-            ...t,
-            status: "RUN",
-            timestamp: new Date().toISOString()
-        };
-    },
 
-    status() {
-        return {
-            name: "ULTRA-MINI-KERNEL",
-            version: "1.0",
-            etagen: this.etagen,
-            algorithmus: "TRENNUNG (Division + Modulo)",
-            status: "AKTIV",
-            timestamp: new Date().toISOString()
-        };
-    }
-};
-
-// ─── 2) RIR.Core – Reinheitsinstanz ────────────────────────────
-const RIR = {
-    exist(input) {
-        return input !== undefined && input !== null;
-    },
-    structure(input) {
-        if (typeof input !== "object") return false;
-        return ["x", "y", "z"].every(key => key in input);
-    },
-    purity(input) {
-        const { x, y, z } = input;
-        return Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z);
-    },
-    filter(input) {
-        if (!this.exist(input)) return null;
-        if (!this.structure(input)) return null;
-        if (!this.purity(input)) return null;
-        return input;
-    },
-    return(input) {
-        const packet = this.filter(input);
-        if (!packet) return { RIR: "reject" };
-        return { RIR: "accept", packet };
-    }
-};
-
-// ─── 3) KIT.js – Pipeline ──────────────────────────────────────
-const KIT = {
-    run(input) {
-        return {
-            status: "accept",
-            source: "KIT",
-            input,
-            processed: {
-                x: input.x * 2,
-                y: input.y * 3,
-                z: input.z * 5
-            },
-            timestamp: new Date().toISOString()
-        };
-    }
-};
-
-// ─── 4) RIR_KIT – Verbindung ──────────────────────────────────
-function RIR_KIT(input) {
-    const check = RIR.return(input);
-    if (check.RIR === "reject") {
-        return { status: "reject", source: "RIR" };
-    }
-    return KIT.run(check.packet);
-}
-
-// ─── 5) TYQ – RAM‑Boot ────────────────────────────────────────
-function TYQ() {
-    const tyq = {
-        RAM: 8192,
-        USED: 0,
-        B: false,
-        BOOT() {
-            this.USED = 2048;
-            this.B = true;
-        },
-        status() {
-            return this.RAM - this.USED;
+        // 2) baseDQF (3.js)
+        try {
+            const dqf = baseDQF(x, y, z);
+            show("baseDQF (3.js)", JSON.stringify(dqf, null, 2));
+        } catch (e) {
+            show("❌ baseDQF ERROR", e.stack, true);
         }
-    };
-    tyq.BOOT();
-    return {
-        RAM: tyq.RAM,
-        USED: tyq.USED,
-        FREE: tyq.status(),
-        BOOTED: tyq.B,
-        status: tyq.status()
-    };
-}
 
-// ─── 6) stateProxy (aus 243.js) ───────────────────────────────
-function getState(prop) {
-    if (typeof prop !== 'string') return undefined;
-    const parts = prop.split(',');
-    return parts.map(p => p.trim());
-}
+        // 3) extendedDQF (81.js)
+        try {
+            const dqfx = extendedDQF(x, y, z);
+            show("extendedDQF (81.js)", JSON.stringify(dqfx, null, 2));
+        } catch (e) {
+            show("❌ extendedDQF ERROR", e.stack, true);
+        }
 
-const stateProxy = new Proxy({}, {
-    get(_, prop) {
-        return getState(prop);
+        // 4) XyX — nur relevant/aussagekräftig, wenn x, y oder z = 9
+        try {
+            const xyx = XyX(x, y, z);
+            show("XyX (XyX.js)", JSON.stringify(xyx, null, 2));
+        } catch (e) {
+            show("❌ XyX ERROR", e.stack, true);
+        }
+
+        // 5) 243.js — Proxy/State-Generator (routet automatisch zu XyX bei 9)
+        try {
+            const state = stateProxy[`${x},${y},${z}`];
+            show("stateProxy (243.js)", JSON.stringify(state, null, 2));
+        } catch (e) {
+            show("❌ stateProxy ERROR", e.stack, true);
+        }
     }
-});
 
-// ─── 7) ETAGEN ──────────────────────────────────────────────────
-const ETAGEN = {
-    3: { label: "UR", faktor: 3, symbol: "🌀" },
-    9: { label: "KERN", faktor: 9, symbol: "⚡" },
-    27: { label: "ORBIT", faktor: 27, symbol: "🌐" },
-    81: { label: "RAUM", faktor: 81, symbol: "🔷" },
-    729: { label: "LEBEN", faktor: 729, symbol: "🌱" }
-};
+    document.getElementById("runBtn").addEventListener("click", run);
 
-// ─── 8) RUN ─────────────────────────────────────────────────────
-function runEtage() {
-    const etage = Number(document.getElementById('etageSelect').value);
-    const wert = Number(document.getElementById('wertInput').value) || 81;
-
-    const result = KERNEL.run(wert, etage);
-    const alle = KERNEL.alle(wert);
-
-    const out = document.getElementById('output');
-    out.innerHTML = `
-<pre style="color:#0f0">
-╔═══════════════════════════════════════════════════════════════╗
-║  📊 RUN · ERGEBNIS                                          ║
-╠═══════════════════════════════════════════════════════════════╣
-║  WERT:     ${result.input}                                  ║
-║  ETAGE:    ${result.etage} · ${ETAGEN[etage]?.label || ''}  ║
-║  GETEILT:  ${result.geteilt.toFixed(4)}                     ║
-║  MOD:      ${result.mod}                                    ║
-║  QUOTIENT: ${result.quotient}                               ║
-║  REST:     ${result.rest}                                   ║
-║  STATUS:   ${result.status}                                 ║
-║  TIMESTAMP:${result.timestamp}                              ║
-╚═══════════════════════════════════════════════════════════════╝
-
-📊 ALLE ETAGEN (${KERNEL.etagen.length}):
-${Object.keys(alle).map(e => {
-    const a = alle[e];
-    return `${e}: ${a.geteilt.toFixed(3)} (MOD:${a.mod} Q:${a.quotient})`;
-}).join('\n')}
-
-🧠 stateProxy Test: ${JSON.stringify(stateProxy['x,y,z'] || 'kein Wert')}
-</pre>
-`;
-
-    document.getElementById('rirOutput').style.display = 'none';
-}
-
-// ─── 9) TYQ ────────────────────────────────────────────────────
-function runTYQ() {
-    const tyq = TYQ();
-    document.getElementById('tyqDisplay').textContent =
-        `${tyq.FREE} MB frei (${tyq.USED} MB genutzt)`;
-
-    const out = document.getElementById('output');
-    out.innerHTML = `
-<pre style="color:#0ff">
-╔═══════════════════════════════════════════════════════════════╗
-║  💾 TYQ · RAM‑STATUS                                        ║
-╠═══════════════════════════════════════════════════════════════╣
-║  RAM:      ${tyq.RAM} MB                                    ║
-║  USED:     ${tyq.USED} MB                                   ║
-║  FREE:     ${tyq.FREE} MB                                   ║
-║  BOOTED:   ${tyq.BOOTED}                                    ║
-║  STATUS:   OK                                               ║
-╚═══════════════════════════════════════════════════════════════╝
-</pre>
-`;
-}
-
-// ─── 10) RIR ────────────────────────────────────────────────────
-function runRIR() {
-    const testInput = { x: 7, y: 11, z: 13 };
-    const result = RIR_KIT(testInput);
-
-    document.getElementById('rirOutput').style.display = 'block';
-    document.getElementById('rirOutput').innerHTML = `
-<pre style="color:#ffaa44">
-╔═══════════════════════════════════════════════════════════════╗
-║  🔍 RIR · REINHEITSINSTANZ                                  ║
-╠═══════════════════════════════════════════════════════════════╣
-║  INPUT:    ${JSON.stringify(testInput)}                     ║
-║  STATUS:   ${result.status}                                 ║
-║  SOURCE:   ${result.source}                                 ║
-║  PROCESSED:${JSON.stringify(result.processed || '—')}       ║
-║  TIMESTAMP:${result.timestamp || new Date().toISOString()}  ║
-╚═══════════════════════════════════════════════════════════════╝
-</pre>
-`;
-}
-
-// ─── 11) RESET ──────────────────────────────────────────────────
-function resetAll() {
-    document.getElementById('output').innerHTML = '<pre style="color:#0a0">⏳ Reset · Bereit...</pre>';
-    document.getElementById('rirOutput').style.display = 'none';
-    document.getElementById('tyqDisplay').textContent = 'INIT';
-}
-
-// ─── 12) URL‑Parameter ────────────────────────────────────────
-const params = new URLSearchParams(window.location.search);
-const etageParam = params.get('etage');
-
-if (etageParam && ETAGEN[etageParam]) {
-    document.getElementById('etageSelect').value = etageParam;
-    setTimeout(runEtage, 200);
-}
-
-// ─── 13) AUTO‑RUN beim Laden ──────────────────────────────────
-window.onload = function() {
-    // TYQ anzeigen
-    const tyq = TYQ();
-    document.getElementById('tyqDisplay').textContent =
-        `${tyq.FREE} MB frei (${tyq.USED} MB genutzt)`;
-
-    // Wenn keine Etage per URL, zeige Standard
-    if (!etageParam || !ETAGEN[etageParam]) {
-        setTimeout(runEtage, 300);
-    }
-};
-
-console.log('✅ SOLIDE · index.html geladen');
-console.log('🧠 KERNEL:', KERNEL.status());
-console.log('💾 TYQ:', TYQ());
-console.log('🔍 RIR: RIR_KIT({x:7,y:11,z:13})', RIR_KIT({x:7,y:11,z:13}));
-console.log('🌀 stateProxy:', stateProxy['x,y,z']);
+    // Erster Lauf mit den Startwerten
+    run();
 </script>
 
 </body>
