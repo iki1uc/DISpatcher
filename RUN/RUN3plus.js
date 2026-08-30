@@ -1,57 +1,77 @@
 // ───────────────────────────────────────────────
-// RUN 3+  ·  MASTER PIPELINE
-// verbindet alle neuen Engines in einem Lauf
+// RUN 3+  ·  AUTO-LOADER VERSION
+// lädt alle neuen Engines, auch wenn einige fehlen
 // ───────────────────────────────────────────────
 
-import BEWEGUNG from "./bewegung.ready";
-import DESA from "./desamalatzion.ready";
-import ASYM from "./asymilation.ready";
-
-import CYLINDER from "../raw/cylinder.pump";
-import AXIOMPUMP from "../ROM/axiom.pump.origin";
+function safeImport(path) {
+    try {
+        return require(path);
+    } catch (e) {
+        return null;
+    }
+}
 
 export async function RUN3PLUS(input = {}) {
 
-    // 1) Bewegung erzeugen
-    const beweg = BEWEGUNG.set(input).compute();
+    // 1) Bewegung (optional)
+    const BEWEGUNG = safeImport("./bewegung.ready");
+    const beweg = BEWEGUNG ? BEWEGUNG.set(input).compute() : {
+        axis: 3,
+        axiom: "e",
+        info: "bewegung.ready fehlt – Default benutzt"
+    };
 
-    // 2) Mechanische Loops pumpen
+    // 2) Cylinder Pump (RAW)
+    const CYLINDER = safeImport("../raw/cylinder.pump");
     const mech = CYLINDER
-        .set({ axis: beweg.axis ?? 81 })
-        .pump(3); // 3 Loops für RUN3+
+        ? CYLINDER.set({ axis: beweg.axis }).pump(3)
+        : { info: "cylinder.pump fehlt – RAW deaktiviert" };
 
-    // 3) Axiom-Pumpe aktivieren
+    // 3) Axiom Pump Origin (ROM)
+    const AXIOMPUMP = safeImport("../ROM/axiom.pump.origin");
     const axiom = AXIOMPUMP
-        .set({ axiom: beweg.axiom ?? "e" })
-        .compute();
+        ? AXIOMPUMP.set({ axiom: beweg.axiom }).compute()
+        : { axiom: beweg.axiom, info: "axiom.pump.origin fehlt – Default" };
 
-    // 4) Raumzerstörung (Worldbrecher)
+    // 4) Desamalatzion (Worldbrecher)
+    const DESA = safeImport("./desamalatzion.ready");
     const desa = DESA
-        .set({
+        ? DESA.set({
             raum: input.raum ?? "default",
             axiom: beweg.axiom,
             axis: beweg.axis
-        })
-        .compute();
+        }).compute()
+        : { info: "desamalatzion.ready fehlt – Raum bleibt stabil" };
 
     // 5) Asymilation (Dispatcher)
+    const ASYM = safeImport("./asymilation.ready");
     const asym = ASYM
-        .set({
-            raum: desa.raum_neu,
+        ? ASYM.set({
+            raum: desa.raum_neu ?? "default",
             axiom: axiom.axiom,
             axis: beweg.axis,
-            hdf: axiom.hdf
-        })
-        .compute();
+            hdf: safeImport("./asymilation.hdf.rom")
+        }).compute()
+        : { info: "asymilation.ready fehlt – keine Integration" };
 
-    // 6) Ergebnis zusammenbauen
+    // 6) Alle HDF-Zonen automatisch laden
+    const HDF_ZONEN = {};
+    const buchstaben = ["d","e","i","n","o","r","s","u","w"];
+
+    buchstaben.forEach(b => {
+        const hdf = safeImport(`../${b}/${b}.hdf.rom`);
+        if (hdf) HDF_ZONEN[b] = hdf;
+    });
+
+    // 7) Ergebnis
     return {
-        RUN: "RUN3+",
+        RUN: "RUN3+ AUTO",
         bewegung: beweg,
         cylinder: mech,
         axiomPump: axiom,
         desamalatzion: desa,
         asymilation: asym,
+        hdfZonen: HDF_ZONEN,
         timestamp: new Date().toISOString()
     };
 }
