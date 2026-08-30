@@ -1,20 +1,30 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iki1uc · RUN · ETAGE</title>
-<style>
-body{background:#000;color:#0f0;font-family:monospace;padding:20px;margin:0}
-pre{font-size:13px;line-height:1.5}
-input,select{background:#000;color:#0f0;border:1px solid #0f0;padding:4px 8px;font-family:monospace}
-button{background:#0f0;color:#000;border:none;padding:6px 16px;font-weight:bold;cursor:pointer}
-button:hover{background:#0ff}
-.flex{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
-.box{border:1px solid #0f0;padding:16px;margin:8px 0;border-radius:8px;background:#0a0a0a}
-</style>
-</head>
-<body>
+async function pipelineBlitz(wert, etage) {
+
+    // PQ-Signal laden (Cold)
+    const pq = await fetch(`../PQ/${etage}.hdf.rom`)
+        .then(r => r.text())
+        .catch(() => "PQ:OFF");
+
+    // RAM-Compute (Hot)
+    const dqf = window.baseDQF
+        ? baseDQF(wert, etage)
+        : { D: "N/A", Q: "N/A", F: "N/A" };
+
+    // ROM-Fallback (Stable)
+    const fallback = window.extendedDQF
+        ? extendedDQF(wert, etage)
+        : { D: "N/A", Q: "N/A", F: "N/A" };
+
+    // RUN-Kernel (Engine)
+    const run = KERNEL.run(wert, etage);
+
+    return {
+        pq,
+        dqf,
+        fallback,
+        run
+    };
+}
 
 <pre>
 ╔═══════════════════════════════════════════════════════════╗
@@ -24,6 +34,30 @@ button:hover{background:#0ff}
 ║  STATUS: BEREIT                                         ║
 ╚═══════════════════════════════════════════════════════════╝
 </pre>
+async function runEtage() {
+    const etage = Number(document.getElementById('etageSelect').value);
+    const wert = Number(document.getElementById('wertInput').value) || 81;
+
+    const pipe = await pipelineBlitz(wert, etage);
+
+    document.getElementById('output').innerHTML = `
+<pre style="color:#0f0">
+
+📡 PQ-SIGNAL:
+${pipe.pq}
+
+🔥 RAM · DQF:
+${JSON.stringify(pipe.dqf, null, 2)}
+
+🧊 ROM · FALLBACK:
+${JSON.stringify(pipe.fallback, null, 2)}
+
+⚙️ RUN · ENGINE:
+${JSON.stringify(pipe.run, null, 2)}
+
+</pre>
+`;
+}
 
 <div class="flex">
     <label>ETAGE:</label>
@@ -47,6 +81,7 @@ button:hover{background:#0ff}
     <pre style="color:#0a0">⏳ Bereit zum Run...</pre>
 </div>
 
+<script>
 <script>
 // ─── ULTRA-MINI-KERNEL ────────────────────────────────────
 const KERNEL = {
@@ -73,44 +108,64 @@ const KERNEL = {
     }
 };
 
-function runEtage() {
+// ─── RUN‑3 · PIPELINE.BLITZ ───────────────────────────────
+async function pipelineBlitz(wert, etage) {
+
+    // PQ-Signal (Cold)
+    const pq = await fetch(`../PQ/${etage}.hdf.rom`)
+        .then(r => r.text())
+        .catch(() => "PQ:OFF");
+
+    // RAM-Compute (Hot)
+    const dqf = window.baseDQF
+        ? baseDQF(wert, etage)
+        : { D: "N/A", Q: "N/A", F: "N/A" };
+
+    // ROM-Fallback (Stable)
+    const fallback = window.extendedDQF
+        ? extendedDQF(wert, etage)
+        : { D: "N/A", Q: "N/A", F: "N/A" };
+
+    // RUN-Kernel (Engine)
+    const run = KERNEL.run(wert, etage);
+
+    return { pq, dqf, fallback, run };
+}
+
+// ─── RUN‑3 OUTPUT ─────────────────────────────────────────
+async function runEtage() {
     const etage = Number(document.getElementById('etageSelect').value);
     const wert = Number(document.getElementById('wertInput').value) || 81;
 
-    const result = KERNEL.run(wert, etage);
-
-    // Alle Etagen berechnen
-    const alle = {};
-    KERNEL.etagen.forEach(e => {
-        alle[e] = KERNEL.trennung(wert, e);
-    });
+    const pipe = await pipelineBlitz(wert, etage);
 
     document.getElementById('output').innerHTML = `
 <pre style="color:#0f0">
-╔═══════════════════════════════════════════════════════════╗
-║  📊 RUN · ERGEBNIS                                      ║
-╠═══════════════════════════════════════════════════════════╣
-║  WERT:    ${result.input}                               ║
-║  ETAGE:   ${result.etage}                               ║
-║  GETEILT: ${result.geteilt.toFixed(4)}                  ║
-║  MOD:     ${result.mod}                                 ║
-║  QUOTIENT:${result.quotient}                            ║
-║  REST:    ${result.rest}                                ║
-║  STATUS:  ${result.status}                              ║
-╚═══════════════════════════════════════════════════════════╝
 
-📊 ALLE ETAGEN:
-${JSON.stringify(alle, null, 2)}
+📡 PQ-SIGNAL:
+${pipe.pq}
+
+🔥 RAM · DQF:
+${JSON.stringify(pipe.dqf, null, 2)}
+
+🧊 ROM · FALLBACK:
+${JSON.stringify(pipe.fallback, null, 2)}
+
+⚙️ RUN · ENGINE:
+${JSON.stringify(pipe.run, null, 2)}
+
 </pre>
 `;
 }
 
 function resetRun() {
-    document.getElementById('output').innerHTML = '<pre style="color:#0a0">⏳ Reset · Bereit zum Run...</pre>';
+    document.getElementById('output').innerHTML =
+        '<pre style="color:#0a0">⏳ Reset · Bereit zum Run...</pre>';
 }
 
-// Auto-Run beim Laden
 window.onload = () => setTimeout(runEtage, 200);
+</script>
+
 </script>
 
 </body>
