@@ -48,6 +48,7 @@ button:hover{background:#0ff}
 </div>
 
 <script>
+<script>
 // ─── ULTRA-MINI-KERNEL ────────────────────────────────────
 const KERNEL = {
     etagen: [3, 9, 27, 81, 729],
@@ -73,44 +74,64 @@ const KERNEL = {
     }
 };
 
-function runEtage() {
+// ─── RUN‑3 · PIPELINE.BLITZ ───────────────────────────────
+async function pipelineBlitz(wert, etage) {
+
+    // PQ-Signal (Cold)
+    const pq = await fetch(`../PQ/${etage}.hdf.rom`)
+        .then(r => r.text())
+        .catch(() => "PQ:OFF");
+
+    // RAM-Compute (Hot)
+    const dqf = window.baseDQF
+        ? baseDQF(wert, etage)
+        : { D: "N/A", Q: "N/A", F: "N/A" };
+
+    // ROM-Fallback (Stable)
+    const fallback = window.extendedDQF
+        ? extendedDQF(wert, etage)
+        : { D: "N/A", Q: "N/A", F: "N/A" };
+
+    // RUN-Kernel (Engine)
+    const run = KERNEL.run(wert, etage);
+
+    return { pq, dqf, fallback, run };
+}
+
+// ─── RUN‑3 OUTPUT ─────────────────────────────────────────
+async function runEtage() {
     const etage = Number(document.getElementById('etageSelect').value);
     const wert = Number(document.getElementById('wertInput').value) || 81;
 
-    const result = KERNEL.run(wert, etage);
-
-    // Alle Etagen berechnen
-    const alle = {};
-    KERNEL.etagen.forEach(e => {
-        alle[e] = KERNEL.trennung(wert, e);
-    });
+    const pipe = await pipelineBlitz(wert, etage);
 
     document.getElementById('output').innerHTML = `
 <pre style="color:#0f0">
-╔═══════════════════════════════════════════════════════════╗
-║  📊 RUN · ERGEBNIS                                      ║
-╠═══════════════════════════════════════════════════════════╣
-║  WERT:    ${result.input}                               ║
-║  ETAGE:   ${result.etage}                               ║
-║  GETEILT: ${result.geteilt.toFixed(4)}                  ║
-║  MOD:     ${result.mod}                                 ║
-║  QUOTIENT:${result.quotient}                            ║
-║  REST:    ${result.rest}                                ║
-║  STATUS:  ${result.status}                              ║
-╚═══════════════════════════════════════════════════════════╝
 
-📊 ALLE ETAGEN:
-${JSON.stringify(alle, null, 2)}
+📡 PQ-SIGNAL:
+${pipe.pq}
+
+🔥 RAM · DQF:
+${JSON.stringify(pipe.dqf, null, 2)}
+
+🧊 ROM · FALLBACK:
+${JSON.stringify(pipe.fallback, null, 2)}
+
+⚙️ RUN · ENGINE:
+${JSON.stringify(pipe.run, null, 2)}
+
 </pre>
 `;
 }
 
 function resetRun() {
-    document.getElementById('output').innerHTML = '<pre style="color:#0a0">⏳ Reset · Bereit zum Run...</pre>';
+    document.getElementById('output').innerHTML =
+        '<pre style="color:#0a0">⏳ Reset · Bereit zum Run...</pre>';
 }
 
-// Auto-Run beim Laden
 window.onload = () => setTimeout(runEtage, 200);
+</script>
+
 </script>
 
 </body>
