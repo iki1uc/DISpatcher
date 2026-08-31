@@ -1,1 +1,11 @@
+import { RUN3 } from "../RUN/3.pipelineblitz.js";
+
+RUN3.syn("../RUN/d/d.ready", {
+    x: 1,
+    y: 2,
+    z: 3,
+    mass: 4,
+    time: 5,
+    axiom: "d"
+}).then(console.log);
 
