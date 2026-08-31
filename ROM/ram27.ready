@@ -1,6 +1,5 @@
-// ─── READY‑MODULE ─────────────────────────────────────────────
-// Jede .ready Datei nutzt dieses Grundmuster
-// Damit ist sie voll JS‑fähig und vom DISpatcher nutzbar
+// ─── READY‑MODULE · RAM27 ─────────────────────────────────────────────
+// Voll JS‑fähig, Imperium‑kompatibel, Etage 27 (ORBIT)
 
 export const READY = {
 
@@ -14,7 +13,9 @@ export const READY = {
         z: 0,
         mass: 1,
         time: 1,
-        axiom: "e"
+        axiom: "e",
+        axis: "e",
+        etage: 27   // ← ORBIT
     },
 
     // Setzen von Input
@@ -25,13 +26,19 @@ export const READY = {
 
     // Haupt‑Algorithmus (hier kommt deine Logik rein)
     compute() {
-        const { x, y, z, mass, time, axiom } = this.input;
+        const { x, y, z, mass, time, axiom, axis, etage } = this.input;
 
-        // Beispiel‑Berechnung (du ersetzt das!)
+        const sum = x + y + z;
+        const torque = sum * mass * time;
+
         const result = {
-            sum: x + y + z,
-            torque: (x + y + z) * mass * time,
+            module: this.name,
+            etage,
+            axis,
+            sum,
+            torque,
             axiomVector: this.axiomVector(axiom),
+            dqf: this.dqf(etage),
             timestamp: new Date().toISOString()
         };
 
@@ -52,6 +59,17 @@ export const READY = {
             u: 2.00
         };
         return AX[key] ?? 1;
+    },
+
+    // DQF‑Routing für Etagen
+    dqf(etage) {
+        const DQF = {
+            3: "UR",
+            9: "KERN",
+            27: "ORBIT",   // ← deine Etage
+            81: "RAUM",
+            729: "LEBEN"
+        };
+        return DQF[etage] ?? "UNKNOWN";
     }
 };
-
