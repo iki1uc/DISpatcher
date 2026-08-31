@@ -1,1 +1,34 @@
+// ─── RUN‑3 · pipelineblitz ─────────────────────────────────────────────
+// Führt jedes READY‑MODULE aus – hier speziell rom.syn.ready
+
+export const RUN3 = {
+
+    name: "RUN‑3 · pipelineblitz",
+
+    // READY‑Modul laden
+    async loadReady(path) {
+        const mod = await import(path);
+        return mod.READY ?? mod.default;
+    },
+
+    // rom.syn.ready ausführen
+    async syn(path, input = {}) {
+        const READY = await this.loadReady(path);
+
+        // Input setzen (Ur‑Form bleibt unverändert)
+        READY.set(input);
+
+        // Compute ausführen
+        const output = READY.compute();
+
+        // Pipelineblitz‑Return
+        return {
+            pipeline: this.name,
+            module: READY.name,
+            input: READY.input,
+            output,
+            timestamp: new Date().toISOString()
+        };
+    }
+};
 
