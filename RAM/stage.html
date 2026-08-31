@@ -2,98 +2,66 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>iki1uc · STAGE</title>
+<title>iki1uc · STAGE · RUN-3</title>
 <style>
-    body {
-        background:#000;
-        color:#0f0;
-        font-family:Consolas, monospace;
-        padding:40px;
-    }
-    h1 {
-        text-align:center;
-        color:#0f0;
-        margin-bottom:20px;
-    }
-    .panel {
-        background:#111;
-        border:1px solid #0f0;
-        padding:20px;
-        border-radius:10px;
-        margin-bottom:20px;
-    }
-    pre {
-        background:#020;
-        padding:20px;
-        border-radius:10px;
-        border:1px solid #0f0;
-        overflow-x:auto;
-    }
+    body{background:#000;color:#0f0;font-family:Consolas,monospace;padding:40px}
+    h1{text-align:center;color:#0f0;margin-bottom:20px}
+    .panel{background:#111;border:1px solid #0f0;padding:20px;border-radius:10px;margin-bottom:20px}
+    pre{background:#020;padding:20px;border-radius:10px;border:1px solid #0f0;overflow-x:auto}
+    button{background:#0f0;color:#000;padding:6px 16px;font-weight:bold;border:none;cursor:pointer}
+    button:hover{background:#0ff}
 </style>
 </head>
 <body>
 
-<h1>iki1uc · STAGE</h1>
+<h1>iki1uc · STAGE · RUN‑3 · pipeline.blitz</h1>
 
 <div class="panel">
-    <h2>Ordner‑Status</h2>
-    <pre>
-Dieser Ordner ist Teil des DISpatcher‑Systems.
-Er dient als Engine‑Stage für:
-
-• Achsen
-• Axiome
-• RAM/ROM‑Werte
-• RAW‑Kräfte
-• API‑Kommunikation
-• Markt‑Impulse
-• DirectV‑Schienen
-• Vector‑Flow
-• D‑Q‑F‑Routing
-• XyX‑Modus
+    <h2>STAGE · Diagnose</h2>
+    <pre id="stageInfo">
+STAGE bereit...
     </pre>
 </div>
 
 <div class="panel">
-    <h2>System‑Narrativ</h2>
-    <pre>
-Dies ist eine narrative Diagnose‑Seite.
-Sie funktioniert wie eine 404.html,
-aber sie erklärt den Zustand dieses Ordners.
-
-Wenn dieser Ordner geladen wird,
-zeigt diese STAGE:
-
-• Welche Engine‑Stufe aktiv ist
-• Welche Achse hier wirkt
-• Welche Axiome gelten
-• Welche RAM/ROM‑Werte geladen sind
-• Welche RAW‑Kräfte aktiv sind
-• Welche API‑Module hier kommunizieren
-• Welche Markt‑Impulse wirken
-• Welche DirectV‑Schiene aktiv ist
-• Welcher Vector‑Flow erzeugt wird
+    <h2>RUN‑3 · Pipeline</h2>
+    <button onclick="runStage()">▶ RUN · STAGE</button>
+    <pre id="stageRun">
+⏳ Pipeline wartet...
     </pre>
 </div>
 
-<div class="panel">
-    <h2>Technische Funktion</h2>
-    <pre>
-Diese STAGE ist nicht Teil des Algorithmus.
-Sie ist eine Diagnose‑Seite.
+<script>
+// ─── MINI-KERNEL ───────────────────────────────────────────
+const KERNEL = {
+    trennung(wert, etage) {
+        return {
+            geteilt: wert / etage,
+            mod: wert % etage,
+            quotient: Math.floor(wert / etage),
+            rest: wert - (Math.floor(wert / etage) * etage)
+        };
+    },
+    run(wert, etage) {
+        const t = this.trennung(wert, etage);
+        return {
+            input: wert,
+            etage,
+            ...t,
+            status: "RUN",
+            timestamp: new Date().toISOString()
+        };
+    }
+};
 
-Sie dient dazu:
+// ─── RUN‑3 · PIPELINE.BLITZ ───────────────────────────────
+async function pipelineBlitz(wert, etage) {
 
-• Fehler zu erkennen
-• Engine‑Stufen zu prüfen
-• Achsen‑Zustände zu sehen
-• Axiom‑Zustände zu prüfen
-• RAM/ROM‑Ladefehler zu erkennen
-• RAW‑Kräfte zu prüfen
-• API‑Kommunikation zu testen
-• Markt‑Impulse zu validieren
-    </pre>
-</div>
+    // PQ-Signal
+    const pq = await fetch(`../PQ/${etage}.hdf.rom`)
+        .then(r => r.text())
+        .catch(() => "PQ:OFF");
 
-</body>
-</html>
+    // RAM-Compute
+    const dqf = window.baseDQF
+        ? baseDQ
