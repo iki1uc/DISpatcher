@@ -1,9 +1,15 @@
-// ─── ROM‑ENGINE ─────────────────────────────────────────────
-// Lädt alle ROM‑Gesetze (Axiome)
+// ─── ROM‑ENGINE · DISpatcher‑Imperium ─────────────────────────────
+// Lädt alle ROM‑Gesetze, validiert sie, synchronisiert sie mit PQ/RAM,
+// und stellt sie der RUN‑Engine stabil zur Verfügung.
 
 export const ROM = {
 
+    cluster: "ROM",
+    state: "READY",
+    mode: "STABLE",
+
     axioms: {},
+    axes: ["d","e","i","n","o","r","s","u","w"],
 
     async load() {
         const files = [
@@ -20,11 +26,52 @@ export const ROM = {
         ];
 
         for (const f of files) {
-            const mod = await import(`./${f}`);
-            this.axioms[f] = mod.default ?? mod;
+            try {
+                const mod = await import(`./${f}`);
+                this.axioms[f] = mod.default ?? mod;
+            } catch (err) {
+                this.axioms[f] = { error: true, file: f };
+            }
         }
 
         return this.axioms;
+    },
+
+    // PQ‑Sync
+    async syncPQ(axis) {
+        return fetch(`../PQ/${axis}.hdf.rom`)
+            .then(r => r.text())
+            .catch(() => "PQ:OFF");
+    },
+
+    // RAM‑Hot‑Sync
+    async syncRAM(axis) {
+        return fetch(`../RAM/${axis}.hdf.rom`)
+            .then(r => r.text())
+            .catch(() => "RAM:OFF");
+    },
+
+    // Axiom‑Validator
+    validate(axis) {
+        const file = `${axis}.hdf.rom`;
+        const ax = this.axioms[file];
+
+        return {
+            axis,
+            file,
+            loaded: !!ax,
+            error: ax?.error ?? false,
+            status: ax?.state ?? "UNKNOWN"
+        };
+    },
+
+    // RUN‑Bindung
+    run(axis = "e") {
+        return {
+            axis,
+            rom: this.validate(axis),
+            timestamp: new Date().toISOString(),
+            status: "RUN‑ROM"
+        };
     }
 };
-
